@@ -29,3 +29,8 @@ mio         = { version = "0.6", optional = true }
 
 [dev-dependencies]
 tempdir = "0.3"
+mio     = "0.6"
+
+[[example]]
+name = "mio"
+required-features = ["mio"]
