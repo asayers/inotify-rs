@@ -446,8 +446,8 @@ impl Inotify {
     /// descriptor allows for all kinds of actions that could cause `Inotify` to
     /// no longer work correctly. Please be aware of what you're doing, and how
     /// this might affect the inotify-rs code.
-    pub unsafe fn fd(&mut self) -> &mut RawFd {
-        &mut self.0
+    pub unsafe fn fd(&self) -> &RawFd {
+        &self.0
     }
 }
 
