@@ -26,6 +26,8 @@ extern crate bitflags;
 extern crate libc;
 extern crate inotify_sys as ffi;
 
+#[cfg(feature = "mio")]
+extern crate mio;
 
 use std::mem;
 use std::io;
@@ -459,6 +461,29 @@ impl Drop for Inotify {
     }
 }
 
+#[cfg(feature = "mio")]
+impl mio::Evented for Inotify {
+    fn register(&self, poll: &mio::Poll, token: mio::Token, interest: mio::Ready,
+            opts: mio::PollOpt) -> io::Result<()> {
+        unsafe {
+            let fd = mio::unix::EventedFd(self.fd());
+            fd.register(poll, token, interest, opts)
+        }
+    }
+    fn reregister(&self, poll: &mio::Poll, token: mio::Token, interest: mio::Ready,
+            opts: mio::PollOpt) -> io::Result<()> {
+        unsafe {
+            let fd = mio::unix::EventedFd(self.fd());
+            fd.reregister(poll, token, interest, opts)
+        }
+    }
+    fn deregister(&self, poll: &mio::Poll) -> io::Result<()> {
+        unsafe {
+            let fd = mio::unix::EventedFd(self.fd());
+            fd.deregister(poll)
+        }
+    }
+}
 
 /// Contains the [`WatchMask`] flags
 ///
